@@ -1,3 +1,6 @@
+from HanoiTowerRobotic import return_first_index_by_column
+
+
 class Node:
     """A node in a search tree. Contains a pointer to the parent (the node
     that this is a successor of) and to the actual state for this node. Note
@@ -19,7 +22,25 @@ class Node:
             self.depth = parent.depth + 1
 
     def __repr__(self):
-        return "<Node {}>".format(self.state)
+        strToReturn = ""
+        if self.depth == 0:
+            strToReturn += "Hanoi Tower with 4 Robots \nInitial State:\n"
+        else:
+            strToReturn += "\n"
+        for x in range(4, -1, -1):
+            for y in range(0, 3):
+                if y == 1:
+                    strToReturn += "  " + str(self.state[x + y * 5]) + "  "
+                else:
+                    strToReturn += "|  " + str(self.state[x + y * 5]) + "  |"
+            strToReturn += "\n"
+        if self.depth > 0:
+            strToReturn += "Robot " + str(self.depth % 4 + 1) + " in movement number {}\n".format(self.depth)
+            steps = self.action.split('TO')
+            strToReturn += "moved block {} ".format(self.state[return_first_index_by_column(self.state, steps[1])])
+            strToReturn += "from column {} to col {}.\n".format(steps[0], steps[1])
+            strToReturn += "The accumulated cost is: {}\n".format(int(self.path_cost))
+        return strToReturn
 
     def __lt__(self, node):
         return self.state < node.state
@@ -32,7 +53,8 @@ class Node:
     def child_node(self, problem, action):
         """[Figure 3.10]"""
         next_state = problem.result(self.state, action)
-        next_node = Node(next_state, self, action, problem.path_cost(self.path_cost, self.state, action, next_state))
+        next_node = Node(next_state, self, action,
+                         problem.path_cost(self.path_cost, self.state, action, next_state, self.depth + 1))
         return next_node
 
     def solution(self):

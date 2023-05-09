@@ -34,7 +34,7 @@ class Problem:
         else:
             return state == self.goal
 
-    def path_cost(self, c, state1, action, state2):
+    def path_cost(self, c, state1, action, state2, num_move):
         """Return the cost of a solution path that arrives at state2 from
         state1 via action, assuming cost c to get up to state1. If the problem
         is such that the path doesn't matter, this function will only look at
@@ -46,3 +46,8 @@ class Problem:
         """For optimization problems, each state has a value. Hill Climbing
         and related algorithms try to maximize this value."""
         raise NotImplementedError
+
+
+def is_in(elt, seq):
+    """Similar to (elt in seq), but compares with 'is', not '=='."""
+    return any(x is elt for x in seq)
